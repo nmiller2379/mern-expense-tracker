@@ -1,9 +1,10 @@
-import React from 'react'
+import React from "react";
 
-export default function Transaction() {
+
+export default function Transaction({ id, date, text, amount, onClick }) {
   return (
-    <li>
-      I'm a list item for a transaction -- eventually, I'll be props passed down from the app component through the transaction list component
+    <li key={id}>
+      {date}: {text} <span>{amount}</span> <button onClick={() => onClick(id)} className="delete-btn">x</button>
     </li>
-  )
+  );
 }
