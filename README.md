@@ -42,20 +42,9 @@ App
 **State**
 Manage state with useState.
 - balance: A number representing the user's balance.
-- transactions: An array of objects representing each transaction. Each object has a text property and an amount property.
+- transactions: An array of objects representing each transaction. Each object has a text (description) property and an amount property and a date property.
 - text: A string representing the text input in the AddTransaction component.
 - amount: A number representing the amount input in the AddTransaction component.
-
-**Actions**
-- getTransactions: Fetches the transactions from the database and sets the transactions state.
-- postTransaction: Adds a new transaction to the database and updates the transactions state.
-- deleteTransaction: Deletes a transaction from the database and updates the transactions state.
-
-**Reducers**
-- transactionReducer: Handles the state changes for the transactions state.
-
-**Context**
-- TransactionContext: Provides the state and actions to the components that need them.
 
 **Server-side API**
 - GET /api/transactions: Returns an array of transactions from the database.
