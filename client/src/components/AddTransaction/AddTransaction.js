@@ -1,30 +1,24 @@
 import React, { useState } from "react";
 
-export default function AddTransaction({ onClick }) {
+const AddTransaction = ({ onClick }) => {
   const [text, setText] = useState("");
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState("");
 
   return (
-    <div id="add-transaction">
-      <h3>Add new transaction</h3>
+    <div>
       <form>
-        <div className="form-control">
-          <label htmlFor="text">Text</label>
+        <div>
+          <label>Description</label>
           <input
             type="text"
-            id="text"
-            placeholder="Enter text..."
             value={text}
             onChange={(e) => setText(e.target.value)}
           />
-          <br />
-          <label htmlFor="amount">
-            Amount (negative = expense, positive = income)
-          </label>
+        </div>
+        <div>
+          <label>Amount</label>
           <input
             type="number"
-            id="amount"
-            placeholder="Enter amount..."
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
           />
@@ -32,16 +26,20 @@ export default function AddTransaction({ onClick }) {
       </form>
       <button
         className="btn"
-        onClick={() =>
+        onClick={() => {
           onClick({
             description: text,
-            amount: parseFloat(amount),
+            amount: parseFloat(amount).toFixed(2), // Ensure two decimal places
             date: new Date().toLocaleString(),
-          })
-        }
+          });
+          setText("");
+          setAmount("");
+        }}
       >
         Add transaction
       </button>
     </div>
   );
-}
+};
+
+export default AddTransaction;

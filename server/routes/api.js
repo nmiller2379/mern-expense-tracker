@@ -19,7 +19,7 @@ router.post("/transactions", (req, res) => {
     .save()
     .then((transaction) => {
       console.log(transaction);
-      res.send("data inserted");
+      res.json(transaction);
     })
     .catch((err) => {
       res.status(400).json(err);

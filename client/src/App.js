@@ -18,21 +18,43 @@ function App() {
     axios
       .get("http://localhost:8080/api/transactions")
       .then((res) => {
-        console.log(res.data);
-        const balance = res.data.reduce((acc, curr) => acc + curr.amount, 0);
-        const income = res.data
-          .filter((item) => item.amount > 0)
-          .reduce((acc, curr) => acc + curr.amount, 0);
         setTransactions(res.data);
-        setExpense(balance - income);
-        setBalance(balance);
-        setIncome(income);
+        calculateAmounts(res.data);
       })
       .catch((err) => console.log(err))
       .finally(() => setLoading(false));
   }, []);
 
+  const calculateAmounts = (transactions) => {
+    const amounts = transactions.map((transaction) => transaction.amount);
+    const total = parseFloat(
+      amounts.reduce((acc, curr) => acc + curr, 0).toFixed(2)
+    );
+    const income = parseFloat(
+      amounts
+        .filter((amount) => amount > 0)
+        .reduce((acc, curr) => acc + curr, 0)
+        .toFixed(2)
+    );
+    const expense = parseFloat(
+      amounts
+        .filter((amount) => amount < 0)
+        .reduce((acc, curr) => acc + curr, 0)
+        .toFixed(2)
+    );
+
+    setBalance(total);
+    setIncome(income);
+    setExpense(expense);
+  };
+
   const deleteTransaction = (id) => {
+    const updatedTransactions = transactions.filter(
+      (transaction) => transaction._id !== id
+    );
+    setTransactions(updatedTransactions);
+    calculateAmounts(updatedTransactions);
+
     axios
       .delete(`http://localhost:8080/api/transactions/${id}`)
       .then((res) => {
@@ -57,9 +79,11 @@ function App() {
 
   const addTransaction = (transaction) => {
     // Update the state immediately
+    const tempId = Date.now().toString();
     const updatedTransaction = {
       ...transaction,
-      _id: Date.now().toString(),
+      amount: parseFloat(transaction.amount),
+      _id: tempId,
     };
     const updatedTransactions = [...transactions, updatedTransaction];
     setTransactions(updatedTransactions);
@@ -68,12 +92,23 @@ function App() {
       0
     );
     setBalance(balance);
+    const income = updatedTransactions
+      .filter((item) => item.amount > 0)
+      .reduce((acc, curr) => acc + curr.amount, 0);
+    setIncome(income);
+    setExpense(balance - income);
 
     // Perform the POST request to save the transaction to the server
     axios
       .post("http://localhost:8080/api/transactions", transaction)
       .then((res) => {
-        console.log("Transaction saved to server:", res.data);
+        const permanentId = res.data._id;
+        const updatedTransaction = {
+          ...transaction,
+          amount: parseFloat(transaction.amount),
+          _id: permanentId,
+        };
+        setTransactions((prevTransactions) => prevTransactions.filter(t => t._id !== tempId).concat(updatedTransaction));
       })
       .catch((err) => {
         console.log(err);
@@ -87,9 +122,15 @@ function App() {
     <div className="App">
       <Header />
       <div className="container">
-        <Balance balanceAmount={balance} />
-        <IncomeExpense amount={expense} text="Expense" />
-        <IncomeExpense amount={income} text="Income" />
+        <Balance balanceAmount={balance.toFixed(2)} />
+        <IncomeExpense
+          amount={expense.toFixed(2)}
+          text="Expense"
+        />
+        <IncomeExpense
+          amount={income.toFixed(2)}
+          text="Income"
+        />
         <TransactionList
           transactions={transactions}
           onClick={deleteTransaction}

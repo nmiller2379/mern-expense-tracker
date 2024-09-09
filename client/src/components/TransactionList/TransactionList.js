@@ -12,7 +12,7 @@ export default function TransactionList({ transactions, onClick }) {
             id={transaction._id}
             date={transaction.date}
             text={transaction.description}
-            amount={transaction.amount}
+            amount={transaction.amount.toFixed(2)}
             onClick={onClick}
           />
         ))}
