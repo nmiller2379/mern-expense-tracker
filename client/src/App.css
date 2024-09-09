@@ -1,11 +1,42 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9fa; /* Off-white background color */
+  font-family: Arial, sans-serif;
+}
+
 .App {
   text-align: center;
+  min-height: 100vh;
+  max-width: 80vw;
+  margin: 0 auto;
+  border: #0a58ca 2px solid;
+  border-radius: 5px;
 }
 
 .green {
-  color: rgb(88, 238, 88);
+  color: rgb(32, 181, 32);
 }
 
 .red {
   color: red;
+}
+
+button {
+  margin: 10px;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  color: aliceblue;
+  background-color: #0d6efd;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #0a58ca;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
 }

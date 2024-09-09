@@ -8,18 +8,20 @@ const AddTransaction = ({ onClick }) => {
     <div>
       <form>
         <div>
-          <label>Description</label>
+          <label>Description: </label>
           <input
             type="text"
             value={text}
+            required
             onChange={(e) => setText(e.target.value)}
           />
         </div>
         <div>
-          <label>Amount</label>
+          <label>Amount: </label>
           <input
             type="number"
             value={amount}
+            required
             onChange={(e) => setAmount(e.target.value)}
           />
         </div>
